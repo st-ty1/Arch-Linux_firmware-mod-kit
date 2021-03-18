@@ -1,9 +1,9 @@
 #! /bin/sh
 
 # path to your local repo of firmware-mod-kit
-$FMK_DIR=$HOME/firmware-mod-kit
+FMK_DIR=$HOME/firmware-mod-kit
 # path to patch of firmware-mod-kit
-$FMK_PATH_DIR=$HOME/Documents/firmware-mod-kit
+FMK_PATH_DIR=$HOME/Documents/firmware-mod-kit
 
 rm -rf $FMK_DIR
 cd $HOME
