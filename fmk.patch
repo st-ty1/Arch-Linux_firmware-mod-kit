@@ -1,0 +1,159 @@
+diff -rau firmware-mod-kit/src/cramfs-2.x/mkcramfs.c firmware-mod-kit_modified/src/cramfs-2.x/mkcramfs.c
+--- firmware-mod-kit/src/cramfs-2.x/mkcramfs.c	2024-11-09 19:10:44.727286634 +0100
++++ firmware-mod-kit_modified/src/cramfs-2.x/mkcramfs.c	2024-11-09 19:10:44.697284871 +0100
+@@ -217,10 +217,10 @@
+  * We define our own sorting function instead of using alphasort which
+  * uses strcoll and changes ordering based on locale information.
+  */
+-static int cramsort (const void *a, const void *b)
++static int cramsort (const struct dirent **a, const struct dirent **b)
+ {
+-	return strcmp ((*(const struct dirent **) a)->d_name,
+-		       (*(const struct dirent **) b)->d_name);
++	return strcmp ((*a)->d_name,
++		       (*b)->d_name);
+ }
+ 
+ static unsigned int parse_directory(struct entry *root_entry, const char *name, struct entry **prev, loff_t *fslen_ub)
+diff -rau firmware-mod-kit/src/others/squashfs-2.0-nb4/nb4-mksquashfs/squashfs/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-2.0-nb4/nb4-mksquashfs/squashfs/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-2.0-nb4/nb4-mksquashfs/squashfs/mksquashfs.c	2024-11-09 19:10:44.737287223 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-2.0-nb4/nb4-mksquashfs/squashfs/mksquashfs.c	2024-11-09 19:10:44.710618989 +0100
+@@ -104,6 +104,8 @@
+ }
+ #endif 
+ 
++int devtable_readdir(void *l, char *filename, char *dir_name, struct stat* devtable_inode_info);
++
+ static FILE *devtable = NULL;
+ 
+ int duplicate_checking = 1, noF = 0, no_fragments = 0, always_use_fragments = 0;
+diff -rau firmware-mod-kit/src/others/squashfs-3.0-e2100/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-3.0-e2100/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-3.0-e2100/mksquashfs.c	2024-11-09 19:10:44.740620752 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-3.0-e2100/mksquashfs.c	2024-11-09 19:10:44.713952517 +0100
+@@ -81,6 +81,8 @@
+ 					EXIT_MKSQUASHFS();\
+ 				} while(0)
+ 
++int dir_scan2(squashfs_inode *inode, struct dir_info *dir_info);
++
+ int delete = FALSE;
+ long long total_compressed = 0, total_uncompressed = 0;
+ int fd;
+diff -rau firmware-mod-kit/src/others/squashfs-3.2-r2/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-3.2-r2/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-3.2-r2/mksquashfs.c	2024-11-09 19:10:44.750621341 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-3.2-r2/mksquashfs.c	2024-11-09 19:10:44.720619576 +0100
+@@ -87,6 +87,8 @@
+ 					EXIT_MKSQUASHFS();\
+ 				} while(0)
+ 
++int dir_scan2(squashfs_inode *inode, struct dir_info *dir_info);
++
+ int delete = FALSE;
+ long long total_compressed = 0, total_uncompressed = 0;
+ int fd;
+@@ -1822,7 +1824,7 @@
+ }
+ 
+ 
+-int progress_bar(long long current, long long max, int columns)
++void progress_bar(long long current, long long max, int columns)
+ {
+ 	int max_digits = ceil(log10(max));
+ 	int used = max_digits * 2 + 10;
+diff -rau firmware-mod-kit/src/others/squashfs-3.3/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-3.3/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-3.3/mksquashfs.c	2024-11-09 19:10:44.753954869 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-3.3/mksquashfs.c	2024-11-09 19:10:44.727286634 +0100
+@@ -1919,7 +1919,7 @@
+ }
+ 
+ 
+-int progress_bar(long long current, long long max, int columns)
++void progress_bar(long long current, long long max, int columns)
+ {
+ 	int max_digits = ceil(log10(max));
+ 	int used = max_digits * 2 + 10;
+diff -rau firmware-mod-kit/src/others/squashfs-3.3/sort.c firmware-mod-kit_modified/src/others/squashfs-3.3/sort.c
+--- firmware-mod-kit/src/others/squashfs-3.3/sort.c	2024-11-09 19:10:44.753954869 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-3.3/sort.c	2024-11-09 19:10:44.723953106 +0100
+@@ -74,7 +74,7 @@
+ struct priority_entry *priority_list[65536];
+ 
+ extern int silent;
+-extern write_file(squashfs_inode *inode, struct dir_ent *dir_ent, int *c_size);
++extern void write_file(squashfs_inode *inode, struct dir_ent *dir_ent, int *c_size);
+ 
+ 
+ int add_priority_list(struct dir_ent *dir, int priority)
+diff -rau firmware-mod-kit/src/others/squashfs-3.4-nb4/squashfs3.4/squashfs-tools/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-3.4-nb4/squashfs3.4/squashfs-tools/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-3.4-nb4/squashfs3.4/squashfs-tools/mksquashfs.c	2024-11-09 19:10:44.737287223 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-3.4-nb4/squashfs3.4/squashfs-tools/mksquashfs.c	2024-11-09 19:10:44.707285458 +0100
+@@ -2002,7 +2002,7 @@
+ 				break;
+ 		}
+ 	}
+-	return NULL;
++	return;
+ }
+ 
+ 
+diff -rau firmware-mod-kit/src/others/squashfs-4.0-lzma/mksquashfs.c firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/mksquashfs.c
+--- firmware-mod-kit/src/others/squashfs-4.0-lzma/mksquashfs.c	2024-11-09 19:10:44.747287810 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/mksquashfs.c	2024-11-09 19:10:44.717286047 +0100
+@@ -3473,7 +3473,7 @@
+ 	struct dir_ent *dir_ent;
+ 	struct pseudo_entry *pseudo_ent;
+ 	struct stat buf;
+-	static pseudo_ino = 1;
++	static int pseudo_ino = 1;
+ 	
+ 	if(dir == NULL && (dir = scan1_opendir("")) == NULL)
+ 		return NULL;
+diff -rau firmware-mod-kit/src/others/squashfs-4.0-lzma/unsquash-3.c firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/unsquash-3.c
+--- firmware-mod-kit/src/others/squashfs-4.0-lzma/unsquash-3.c	2024-11-09 19:10:44.747287810 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/unsquash-3.c	2024-11-09 19:10:44.713952517 +0100
+@@ -36,7 +36,7 @@
+ 		sBlk.fragment_table_start);
+ 
+ 	if(sBlk.fragments == 0)
+-		return;
++		return TRUE;
+ 
+ 	if((fragment_table = malloc(sBlk.fragments *
+ 			sizeof(squashfs_fragment_entry_3))) == NULL)
+diff -rau firmware-mod-kit/src/others/squashfs-4.0-lzma/unsquash-4.c firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/unsquash-4.c
+--- firmware-mod-kit/src/others/squashfs-4.0-lzma/unsquash-4.c	2024-11-09 19:10:44.747287810 +0100
++++ firmware-mod-kit_modified/src/others/squashfs-4.0-lzma/unsquash-4.c	2024-11-09 19:10:44.713952517 +0100
+@@ -38,7 +38,7 @@
+ 		sBlk.fragment_table_start);
+ 
+ 	if(sBlk.fragments == 0)
+-		return;
++		return TRUE;
+ 
+ 	if((fragment_table = malloc(sBlk.fragments *
+ 			sizeof(squashfs_fragment_entry))) == NULL)
+diff -rau firmware-mod-kit/src/squashfs-3.0/mksquashfs.c firmware-mod-kit_modified/src/squashfs-3.0/mksquashfs.c
+--- firmware-mod-kit/src/squashfs-3.0/mksquashfs.c	2024-11-09 19:10:44.733953693 +0100
++++ firmware-mod-kit_modified/src/squashfs-3.0/mksquashfs.c	2024-11-09 19:10:44.703951930 +0100
+@@ -112,6 +112,8 @@
+ 					EXIT_MKSQUASHFS();\
+ 				} while(0)
+ 
++int dir_scan2(squashfs_inode *inode, struct dir_info *dir_info);
++
+ int delete = FALSE;
+ long long total_compressed = 0, total_uncompressed = 0;
+ int fd;
+diff -rau firmware-mod-kit/src/squashfs-3.0-lzma-damn-small-variant/mksquashfs.c firmware-mod-kit_modified/src/squashfs-3.0-lzma-damn-small-variant/mksquashfs.c
+--- firmware-mod-kit/src/squashfs-3.0-lzma-damn-small-variant/mksquashfs.c	2024-11-09 19:36:48.525465394 +0100
++++ firmware-mod-kit_modified/src/squashfs-3.0-lzma-damn-small-variant/mksquashfs.c	2024-11-09 19:10:44.700618400 +0100
+@@ -97,6 +97,9 @@
+ int g_lp=2;
+ int g_pb=2;				
+ #endif
++
++
++int dir_scan2(squashfs_inode *inode, struct dir_info *dir_info);
+ 				
+ int delete = FALSE;
+ long long total_compressed = 0, total_uncompressed = 0;
