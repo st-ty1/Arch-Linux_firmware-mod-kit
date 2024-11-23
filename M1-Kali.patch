@@ -1,0 +1,20 @@
+diff --git a/patches/patch0.txt b/patches/patch0.txt
+index 42af923..35c80a6 100644
+--- a/patch0.txt
++++ b/patch0.txt
+@@ -38118,12 +38118,12 @@ diff --strip-trailing-cr -NBbaur squashfs-tools/Makefile squashfs-tools-patched/
+  	unsquash-4.o swap.o compressor.o unsquashfs_info.o
+  
+ -CFLAGS ?= -O2
+-+# CJH: Added -g, -Werror and -DSQUASHFS_TRACE
+-+CFLAGS ?= -g -O2
+++# CJH: Added -g, -fcommon and removed -Werror and -DSQUASHFS_TRACE
+++CFLAGS ?= -g -O2 -fcommon
+  CFLAGS += $(EXTRA_CFLAGS) $(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 \
+  	-D_LARGEFILE_SOURCE -D_GNU_SOURCE -DCOMP_DEFAULT=\"$(COMP_DEFAULT)\" \
+ -	-Wall
+-+	-Wall -Werror #-DSQUASHFS_TRACE
+++	-Wall #-Werror #-DSQUASHFS_TRACE
+  
+  LIBS = -lpthread -lm
+  ifeq ($(GZIP_SUPPORT),1)
