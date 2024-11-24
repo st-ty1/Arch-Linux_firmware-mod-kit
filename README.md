@@ -35,23 +35,23 @@ Create a virtual environment for python and install pip inside:
 ~~~
 	$ python -m virtualenv -p /usr/bin/python3.8 ~/python38
 	$ source ~/python38/bin/activate
-        $ python -m pip --version
+        (python38) $ python -m pip --version
 ~~~
 Install binwalk:
 ~~~
-	$ cd binwalk-2.1.1
-	$ python setup.py install
+	(python38) $ cd binwalk-2.1.1
+	(python38) $ python setup.py install
 ~~~
 Install python packages needed for binwalk:
 ~~~
-	$ pip install scipy
-	$ pip install pyqtgraph
-	$ pip install capstone
-	$ pip install numpy
-	$ pip install pyqt5
-	$ pip install jefferson
-	$ pip install ubi_reader
-        $ deactivate
+	(python38) $ pip install scipy
+	(python38) $ pip install pyqtgraph
+	(python38) $ pip install capstone
+	(python38) $ pip install numpy
+	(python38) $ pip install pyqt5
+	(python38) $ pip install jefferson
+	(python38) $ pip install ubi_reader
+        (python38) $ deactivate
 ~~~
 Build and install cramfs, needed by binwalk:
 ~~~
