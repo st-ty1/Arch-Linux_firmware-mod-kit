@@ -21,17 +21,21 @@ Install tools needed by firmware-mod-kit:
 	$ cd src
 	$ make
 ~~~
-Install prerequisites of binwalk:
+Install first part of prerequisites of binwalk, available in Arch repos::
 ~~~
 	$ sudo pacman -S wget tar python python-virtualenv trizen git base-devel mtd-utils gzip bzip2 tar arj lhasa p7zip cabextract squashfs-tools zlib xz lzo sleuthkit unarchiver
 	$ trizen -S cramfsswap
 ~~~
 As the installation of the prerequisites of python2 from aur repo is broken and python3.12 of the arch repo is too fresh for binwalk, 
-an older python3 version has to be installed:
+an older python3 version (e.g. python 3.8) has to be installed:
 ~~~
 	$ trizen -S python38
+~~~
+Create a virtual environment for python and install pip inside:
+~~~
 	$ python -m virtualenv -p /usr/bin/python3.8 ~/python38
 	$ source ~/python38/bin/activate
+        $ python -m pip --version
 ~~~
 Install binwalk:
 ~~~
@@ -47,8 +51,9 @@ Install python packages needed for binwalk:
 	$ pip install pyqt5
 	$ pip install jefferson
 	$ pip install ubi_reader
+        $ deactivate
 ~~~
-Install cramfs, needed by binwalk:
+Build and install cramfs, needed by binwalk:
 ~~~
 	$ cd ~
 	$ git clone https://github.com/davidribyrne/cramfs.git
@@ -57,7 +62,7 @@ Install cramfs, needed by binwalk:
 	$ make
 	$ sudo make install
 ~~~
-Install sasquatch, needed by binwalk:
+Build and install sasquatch, needed by binwalk:
 ~~~
 	$ cd ~
 	$ git clone https://github.com/devttys0/sasquatch.git
